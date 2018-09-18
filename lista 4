@@ -1,0 +1,115 @@
+#include <iostream>
+
+using namespace std;
+
+typedef int Dado;
+
+class noh { 
+	
+	friend class lista;
+	
+	private:
+		noh *proximo;
+		Dado numero;
+	public:
+		noh (Dado y);
+	
+	};
+	
+noh::noh (Dado y) : numero(y){ 
+	proximo = NULL;
+}
+		
+class lista { 
+	private : 
+		
+		noh* primeiro;
+		noh* ultimo;
+		unsigned tamanho;
+	
+	public : 
+		lista();
+		void inserir(Dado dado);
+		void matar(Dado posicao,Dado dado);
+		void imprimir();
+};
+	
+lista::lista(){
+	primeiro = NULL;
+	ultimo = NULL;
+	tamanho = 0;
+}
+
+void lista::inserir(Dado dado){
+	
+	for (int i = 0; i < dado; i++){
+		
+		noh *novo = new noh(i+1);
+		
+		if ( primeiro == NULL ) { 
+			primeiro = novo;
+			ultimo = novo;
+		} else { 
+			
+		novo->proximo = primeiro;
+		primeiro = novo;
+		}
+	}
+	
+	tamanho = dado;
+	ultimo->proximo = primeiro;
+}	
+
+void lista::imprimir() { 
+	
+	cout << primeiro->proximo->numero;
+}
+
+void lista::matar(Dado posicao,Dado dado){
+	noh *remove;
+	noh *aux = primeiro;
+	
+	while ( tamanho != 1 ) { 
+		
+		for (int i = 0; i < posicao; i++){
+			aux = aux->proximo;
+		}
+		
+		if ( primeiro->proximo == aux->proximo ) {
+			remove = aux->proximo;
+			primeiro = remove->proximo;
+			aux = primeiro->proximo;
+			delete remove;
+		} 
+		
+		else if ( ultimo->proximo == aux->proximo ) { 
+			remove = aux->proximo;
+			ultimo = aux;
+			ultimo->proximo = primeiro;
+			delete remove;
+		} else { 
+			
+			remove = aux->proximo;
+			aux = remove->proximo;
+			delete remove;
+		}
+		
+		tamanho--;
+	}
+}
+
+int main () { 
+	
+	lista oi;
+	//x dado
+	//y posicao
+	
+	int x,y;
+	cin >> x >> y;
+	
+	oi.inserir(x);
+	//oi.matar(y,x);
+	oi.imprimir();
+	
+return 0;
+}
